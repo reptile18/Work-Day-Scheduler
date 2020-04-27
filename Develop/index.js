@@ -2,6 +2,7 @@ $(document).ready(function() {
   var currentDate = moment();
   var dateString = currentDate.format("MMMM Do YYYY");
   var schedule;
+  var activeDataHour;
   
   $("#currentDay").text(dateString);
   function fakeStorage() {
@@ -57,19 +58,23 @@ $(document).ready(function() {
   }
   update();
 
+  function onOutsideTextAreaClick(event) {
+    alert(1);
+    if (!$("#edit"+activeDataHour).is(event.target) && $("#edit"+activeDataHour).has(event.target).length === 0) {
+      $("#item"+activeDataHour).addClass("d-flex").removeClass("d-none");
+      $("#edit"+activeDataHour).remove();
+      $(document).off("click");
+    }
+  }
+
   // Events
   $(".time-block").click(function(event) {
     event.stopPropagation();
-    let datahour = $(this).attr("data-hour");
-    var itemInput = $("<textarea>").addClass("time-block col-sm-10 d-flex justify-content-center align-items-center").attr("id","edit"+datahour).val($(this).text());
+    activeDataHour = $(this).attr("data-hour");
+    var itemInput = $("<textarea>").addClass("time-block col-sm-10 d-flex justify-content-center align-items-center").attr("id","edit"+activeDataHour).val($(this).text());
     
     // hide if click outside
-    $(document).click(function(event) {
-      if (!$("#edit"+datahour).is(event.target) && $("#edit"+datahour).has(event.target).length === 0) {
-        $("#item"+datahour).addClass("d-flex").removeClass("d-none");
-        $("#edit"+datahour).remove();
-      }
-    });
+    $(document).click(onOutsideTextAreaClick);
     $(this).before(itemInput);
     $(this).addClass("d-none").removeClass("d-flex");
     itemInput.focus();
@@ -78,7 +83,7 @@ $(document).ready(function() {
   $(".saveBtn").click(function() {
     let datahour = $(this).attr("data-hour");
     $("#item"+datahour).addClass("d-flex").removeClass("d-none").text($("#edit"+datahour).val());
-    $(document).click("");
+    $(document).off("click");
     //save
     schedule[dateString]["t"+datahour] = $("#item"+datahour).text();
     save();
