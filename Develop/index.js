@@ -56,12 +56,21 @@ $(document).ready(function() {
     $(".container").append(divRow);
   }
   update();
-  $(".time-block").click(function() {
-    let datahour = $(this).attr("data-hour");
-    var itemInput = $("<textarea>").addClass("time-block col-sm-10 d-flex justify-content-center align-items-center").attr("id","edit"+datahour);
-    itemInput.val($(this).text());
-    $(this).before(itemInput);
 
+  // Events
+  $(".time-block").click(function(event) {
+    event.stopPropagation();
+    let datahour = $(this).attr("data-hour");
+    var itemInput = $("<textarea>").addClass("time-block col-sm-10 d-flex justify-content-center align-items-center").attr("id","edit"+datahour).val($(this).text());
+    
+    // hide if click outside
+    $(document).click(function(event) {
+      if (!$("#edit"+datahour).is(event.target) && $("#edit"+datahour).has(event.target).length === 0) {
+        $("#item"+datahour).addClass("d-flex").removeClass("d-none");
+        $("#edit"+datahour).remove();
+      }
+    });
+    $(this).before(itemInput);
     $(this).addClass("d-none").removeClass("d-flex");
     itemInput.focus();
   });
@@ -69,6 +78,7 @@ $(document).ready(function() {
   $(".saveBtn").click(function() {
     let datahour = $(this).attr("data-hour");
     $("#item"+datahour).addClass("d-flex").removeClass("d-none").text($("#edit"+datahour).val());
+    $(document).click("");
     //save
     schedule[dateString]["t"+datahour] = $("#item"+datahour).text();
     save();
