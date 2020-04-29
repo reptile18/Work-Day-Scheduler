@@ -1,5 +1,5 @@
 # Work Day Scheduler
-
+![alt text](https://github.com/reptile18/Work-Day-Scheduler/Assets/schedule.png "code quiz")
 A demonstration of a work day scheduler using JQuery and the Moment.js API
 
 ## Getting Started
