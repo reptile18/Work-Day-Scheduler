@@ -1,12 +1,15 @@
 $(document).ready(function() {
   var currentDate = moment();
-  var dateString = currentDate.format("MMMM Do YYYY");
+  var format = "YYYY-MM-DD"
+  var dateString = currentDate.format(format);
+  var dateStringForDisplay = currentDate.format("MMMM Do YYYY");
   var schedule;
   var activeDataHour;
   
   function updateDate() {
-    dateString = currentDate.format("MMMM Do YYYY")
-    $("#currentDay").text(dateString);
+    dateString = currentDate.format(format);
+    dateStringForDisplay = currentDate.format("MMMM Do YYYY");
+    $("#currentDay").text(dateStringForDisplay);
   }
   updateDate();
 
@@ -28,6 +31,7 @@ $(document).ready(function() {
   }
   
   function update() {
+    $("#time-blocks").empty();
     for (var t = 9; t < 18; t++)
     {
       let item;
@@ -77,7 +81,7 @@ $(document).ready(function() {
     }
 
     divRow.append(hour).append(timeBlock).append(saveButtonDiv);
-    $(".container").append(divRow);
+    $("#time-blocks").append(divRow);
   }
   update();
 
@@ -89,7 +93,6 @@ $(document).ready(function() {
     }
   }
   function onTimeBlockClick(event) {
-    console.log("time_click");
     event.stopPropagation();
     activeDataHour = $(this).attr("data-hour");
     var itemInput = $("<textarea>").addClass("time-block col-sm-10 d-flex justify-content-center align-items-center").attr("id","edit"+activeDataHour).val($(this).text());
@@ -122,12 +125,17 @@ $(document).ready(function() {
 
   function newDay() {
     offEvents();
-    $(".container").empty();
     updateDate();
     update();
     onEvents();
     if (typeof schedule[dateString] === "undefined") {
       schedule[dateString] = {};
+    }
+    if (currentDate.dayOfYear() < moment().dayOfYear()) {
+      $("#clearPrevious").removeClass("dispNone");
+    }
+    else {
+      $("#clearPrevious").addClass("dispNone");
     }
   }
 
@@ -146,6 +154,18 @@ $(document).ready(function() {
     newDay();
   }); 
   
+  $("#clearPrevious").click(function(event) {
+    Object.keys(schedule).forEach(function(key) {
+      var prevDate = moment(key,format);
+
+      if (prevDate.diff(moment(),"days") < 0) {
+        console.log("remove date: " + key);
+        delete schedule[key];
+      }
+    });
+    save();
+    update();
+  });
 
 
 });

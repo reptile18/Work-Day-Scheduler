@@ -87,3 +87,14 @@ textarea{
   margin-left: 10px;
   margin-right: 10px;
 }
+
+.dispNone {
+  display: none;
+}
+
+.clearPreviousBtn { 
+  background-color: #D50F2F;
+  color: white;
+  padding: 10px;
+  border-radius: 15px;
+}
