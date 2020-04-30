@@ -38,6 +38,12 @@ Open index.html.
 1. Click the chevrons to the left or right of the current day.
 2. Observe that the date in the jumbotron changes accordingly and events entered on alternate dates correctly update accordingly in the schedule.
 
+* Delete all old time blocks
+1. Click the left chevron to enter an old date
+2. If no old time blocks exist, click on an empty time block, enter text, and save.
+3. Click the Delete All Old Blocks
+4. Verify any blocks older than today are deleted.
+
 ## Authors
 
 * **Johnny Li** - *Initial work* - [reptile18](https://github.com/reptile18)
